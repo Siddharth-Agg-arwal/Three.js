@@ -14,31 +14,31 @@ const scene = new THREE.Scene()
 // Object
 // const geometry = new THREE.BufferGeometry(1, 1, 1,3,3,3)
 // Define the vertices for the cube
-const vertices = new Float32Array([
-    -1, -1, -1,  // Vertex 0
-     1, -1, -1,  // Vertex 1
-     1,  1, -1,  // Vertex 2
-    -1,  1, -1,  // Vertex 3
-    -1, -1,  1,  // Vertex 4
-     1, -1,  1,  // Vertex 5
-     1,  1,  1,  // Vertex 6
-    -1,  1,  1,  // Vertex 7
-  ]);
+// const vertices = new Float32Array([
+//     -1, -1, -1,  // Vertex 0
+//      1, -1, -1,  // Vertex 1
+//      1,  1, -1,  // Vertex 2
+//     -1,  1, -1,  // Vertex 3
+//     -1, -1,  1,  // Vertex 4
+//      1, -1,  1,  // Vertex 5
+//      1,  1,  1,  // Vertex 6
+//     -1,  1,  1,  // Vertex 7
+//   ]);
   
-  // Define the indices to connect the vertices to form triangles
-  const indices = new Uint16Array([
-    0, 1, 2,  0, 2, 3,  // Front face
-    4, 5, 6,  4, 6, 7,  // Back face
-    0, 4, 7,  0, 7, 3,  // Left face
-    1, 5, 6,  1, 6, 2,  // Right face
-    0, 1, 5,  0, 5, 4,  // Bottom face
-    2, 3, 7,  2, 7, 6   // Top face
-  ]);
+//   // Define the indices to connect the vertices to form triangles
+//   const indices = new Uint16Array([
+//     0, 1, 2,  0, 2, 3,  // Front face
+//     4, 5, 6,  4, 6, 7,  // Back face
+//     0, 4, 7,  0, 7, 3,  // Left face
+//     1, 5, 6,  1, 6, 2,  // Right face
+//     0, 1, 5,  0, 5, 4,  // Bottom face
+//     2, 3, 7,  2, 7, 6   // Top face
+//   ]);
   
-  // Create a BufferGeometry and set its attributes
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3)); // 3 components per vertex
-  geometry.setIndex(new THREE.BufferAttribute(indices, 1)); // 1 component per index
+//   // Create a BufferGeometry and set its attributes
+//   const geometry = new THREE.BufferGeometry();
+//   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3)); // 3 components per vertex
+//   geometry.setIndex(new THREE.BufferAttribute(indices, 1)); // 1 component per index
   
 
 // const geometry = new THREE.BufferGeometry()
@@ -56,6 +56,19 @@ const vertices = new Float32Array([
 
 // const face = new THREE.Face3(0,1,2)
 // geometry.faces.push(face)
+
+//TRIANGLE with buffer geometry
+// Define the vertices for the triangle
+const vertices = new Float32Array([
+    0.0, 1.0, 0.0,  // Vertex 0 (top)
+   -1.0, -1.0, 0.0, // Vertex 1 (bottom-left)
+    1.0, -1.0, 0.0 // Vertex 2 (bottom-right)
+  ]);
+  
+  // Create a BufferGeometry and set its attributes
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3)); // 3 components per vertex
+  
 
 const material = new THREE.MeshBasicMaterial({ 
     wireframe:true,
