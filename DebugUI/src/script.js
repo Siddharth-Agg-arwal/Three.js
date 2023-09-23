@@ -15,10 +15,32 @@ const scene = new THREE.Scene()
 /**
  * Object
  */
-const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+
+// Define cube size and half-size
+const cubeSize = 1;
+const halfCubeSize = cubeSize / 2;
+
+// Define vertices for the cube
+const vertices = new Float32Array([
+  -halfCubeSize, -halfCubeSize, -halfCubeSize,
+  halfCubeSize, -halfCubeSize, -halfCubeSize,
+  halfCubeSize, halfCubeSize, -halfCubeSize,
+  -halfCubeSize, halfCubeSize, -halfCubeSize,
+
+  -halfCubeSize, -halfCubeSize, halfCubeSize,
+  halfCubeSize, -halfCubeSize, halfCubeSize,
+  halfCubeSize, halfCubeSize, halfCubeSize,
+  -halfCubeSize, halfCubeSize, halfCubeSize,
+]);
+
+// Create BufferGeometry
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+// Create material and mesh
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube)
 
 /**
  * Sizes
