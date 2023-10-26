@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import gui from 'lil-gui'
+import GUI from 'lil-gui'
 
 /**
  * Base
@@ -11,6 +11,24 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+
+// Environment Map
+
+/*
+IMPORTANT: 
+HDRIHaven.com FOR BEST AND AWESOME QUALITY ENVIRONMENT MAPS
+CAN CONVERT HDRI EASILY TO ENV MAPS USING SOME ONLINE TOOL
+*/
+const cubeTextureLoader = new THREE.CubeTextureLoader()
+const environmentMapTexture = cubeTextureLoader.load([
+    '/textures/environmentMaps/1/px.jpg',
+    '/textures/environmentMaps/1/nx.jpg',
+    '/textures/environmentMaps/1/py.jpg',
+    '/textures/environmentMaps/1/ny.jpg',
+    '/textures/environmentMaps/1/pz.jpg',
+    '/textures/environmentMaps/1/nz.jpg'
+])
 
 //Textures
 const textureLoader = new THREE.TextureLoader()
@@ -24,6 +42,9 @@ const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
 const matcapTexture = textureLoader.load('/textures/matcaps/8.png')
 const gradientTexture = textureLoader.load('/textures/gradients/5.jpg')
 
+
+// Debug GUI
+const gui = new GUI()
 
 // Objects
 // const material = new THREE.MeshBasicMaterial()
@@ -58,23 +79,45 @@ const gradientTexture = textureLoader.load('/textures/gradients/5.jpg')
 // gradientTexture.generateMipmaps= false
 
 const material = new THREE.MeshStandardMaterial()
-material.metalness = 0.45
-material.roughness = 0.65
+material.metalness = 0.7
+material.roughness = 0.2
+material.envMap = environmentMapTexture
+// material.map = doorColorTexture
+// material.aoMap = doorAmbientOcclusionTexture
+// material.aoMapIntensity = 1
+// material.displacementMap = doorHeightTexture
+// material.displacementScale = 0.05
+// material.roughnessMap = doorRoughnessTexture
+// material.metalnessMap = MetalnessTexture
+// material.normalMap = doorNormalTexture
+// material.normalScale.set(0.5,0.5)
+// material.alphaMap = doorAlphaTexture
+// material.transparent = true
+// material.wireframe = false
+
+gui.add(material,'metalness').min(0).max(1).step(0.001)
+gui.add(material,'roughness').min(0).max(1).step(0.001)
+gui.add(material,'aoMapIntensity').min(0).max(10).step(0.01)
+gui.add(material,'displacementScale').min(0).max(10).step(0.001)
 
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5,16,16),
+    new THREE.SphereGeometry(0.5,64,64),
     material
 )
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1,1),
+    new THREE.PlaneGeometry(1,1,100,100),
     material
 )
+
+// plane.geometry.setAttribute(
+//     'uv2',new THREE.BufferAttribute(plane.geometry.attributes.uv.array,2 )
+//     )
 
 sphere.position.x = -1.5
 
 const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3,0.2,16,32),
+    new THREE.TorusGeometry(0.3,0.2,64,128),
     material
 )
 
