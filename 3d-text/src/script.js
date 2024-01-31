@@ -2,12 +2,17 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+
+
 
 /**
  * Base
  */
 // Debug
 const gui = new dat.GUI()
+console.log("hello")
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -23,12 +28,37 @@ const textureLoader = new THREE.TextureLoader()
 /**
  * Object
  */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
-)
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh)
 
-scene.add(cube)
+// FONTS 
+const fontLoader = new FontLoader();
+fontLoader.load(
+    '/fonts/helvetiker_regular.typeface.json',
+    (font) => {
+        console.log(font)
+        const textGeometry = new TextGeometry(
+            'friggin wimdy',
+            {
+                font:font,
+                size:0.1,
+                height:0.3,
+                curveSegments: 1,
+                bevelEnabled: true,
+                bevelThickness: 0.3,
+                bevelSize: 8,
+                bevelOffset: 0,
+                bevelSegments: 1
+            }
+        );
+
+        const textMaterial = new THREE.MeshBasicMaterial()
+        const text = new THREE.Mesh(textGeometry, textMaterial)
+        scene.add(text)
+    }
+)
 
 /**
  * Sizes
