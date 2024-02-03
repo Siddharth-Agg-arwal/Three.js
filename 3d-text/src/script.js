@@ -12,7 +12,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
  */
 // Debug
 const gui = new dat.GUI()
-console.log("hello")
+// console.log("hello")
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -24,14 +24,15 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
+const matcapTexture =  textureLoader.load('/textures/matcaps/8.png')
 
 /**
  * Object
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+// const geometry = new THREE.BoxGeometry(1, 1, 1)
+// const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+// const mesh = new THREE.Mesh(geometry, material)
+// scene.add(mesh)
 
 
 
@@ -43,7 +44,7 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 	const textgeometry = new TextGeometry( 'Hello three.js!', {
 		font: font,
 		size: 200,
-		height: 5,
+		height: 10,
 		curveSegments: 6,
 		bevelEnabled: true,
 		bevelThickness: 10,
@@ -51,10 +52,14 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 		bevelOffset: 0,
 		bevelSegments: 4
 	} );
-        const textMaterial = new THREE.MeshBasicMaterial()
-        textMaterial.wireframe = true
-        const text = new THREE.Mesh(textgeometry, textMaterial)
-        text.scale.set(0.1, 0.1, 0.1); // Adjust the scale of the text
+
+        //ALTERNATIVELY SET COMMON MATERIAL FOR DONUTS AND TEXT
+        const matcapmaterial = new THREE.MeshMatcapMaterial({matcap: matcapTexture})
+
+        // const textMaterial = new THREE.MeshMatcapMaterial({matcap: matcapTexture})
+        // textMaterial.wireframe = true
+        const text = new THREE.Mesh(textgeometry, matcapmaterial)
+        text.scale.set(0.01, 0.01, 0.01); // Adjust the scale of the text
         scene.add(text)
         
         // textgeometry.computeBoundingBox();
@@ -65,6 +70,37 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
         // )
 
         textgeometry.center()
+
+        console.time('donuts')
+
+        const donutGeometry = new THREE.TorusGeometry()
+        // const donutMaterial = new THREE.MeshMatcapMaterial({matcap : matcapTexture})
+
+        for(let i = 0; i< 1000; i++){
+            
+            const donut = new THREE.Mesh(donutGeometry, matcapmaterial)
+
+            donut.position.x = (Math.random()-0.5) * 20
+            donut.position.y = (Math.random()-0.5) * 20
+            donut.position.z = (Math.random()-0.5) * 20
+            
+            donut.rotation.x = Math.random() * Math.PI
+            donut.rotation.y = Math.random() * Math.PI
+            donut.rotation.z = Math.random() * Math.PI
+
+            const scaled = Math.random() * 0.3
+            //NOT WORKING FOR SOME REASON
+            // donut.scale.set = (scaled*0.01, scaled*0.01, scaled*0.01) 
+
+            // OR
+            donut.scale.x = scaled 
+            donut.scale.y = scaled 
+            donut.scale.z = scaled 
+
+            scene.add(donut)
+        }
+
+        console.timeEnd('donuts')
     },
 )
 
