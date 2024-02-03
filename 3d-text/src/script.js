@@ -33,12 +33,14 @@ const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
+
+
 // FONTS 
 const loader = new FontLoader();
 
 loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 
-	const geometry = new TextGeometry( 'Hello three.js!', {
+	const textgeometry = new TextGeometry( 'Hello three.js!', {
 		font: font,
 		size: 200,
 		height: 5,
@@ -51,25 +53,34 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 	} );
         const textMaterial = new THREE.MeshBasicMaterial()
         textMaterial.wireframe = true
-        const text = new THREE.Mesh(geometry, textMaterial)
+        const text = new THREE.Mesh(textgeometry, textMaterial)
         text.scale.set(0.1, 0.1, 0.1); // Adjust the scale of the text
         scene.add(text)
-    }
+        
+        // textgeometry.computeBoundingBox();
+        // textgeometry.translate(
+        //     - textgeometry.boundingBox.max.x * 0.5,
+        //     - textgeometry.boundingBox.max.y * 0.5,
+        //     - textgeometry.boundingBox.max.z * 0.5
+        // )
+
+        textgeometry.center()
+    },
 )
-
-geometry.computeBoundingBox();
-console.log(geometry.computeBoundingBox())
-geometry.translate(
-    - geometry.boundingBox.max.x * 0.5,
-    - geometry.boundingBox.max.y * 0.5,
-    - geometry.boundingBox.max.z 
-)
-
-
 
 
 const axesHelper = new THREE.AxesHelper()
 scene.add(axesHelper)
+// geometry.computeBoundingBox();
+// geometry.computeBoundingBox()
+// console.log(geometry.boundingBox)
+
+
+
+// After computing the bounding box
+
+
+
 /**
  * Sizes
  */
