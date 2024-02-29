@@ -3,6 +3,8 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import {RectAreaLightHelper} from 'three/examples/jsm/helpers/RectAreaLightHelper'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 
 /**
  * Base
@@ -83,32 +85,65 @@ scene.add(rectAreaLightHelper)
 const material = new THREE.MeshStandardMaterial(    )
 material.roughness = 0.4
 
-// Objects
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    material
-)
-sphere.position.x = - 1.5
+const loader = new GLTFLoader('models/gltf/ironCrown.gltf')
+console.log(loader)
 
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(0.75, 0.75, 0.75),
-    material
-)
+// // Objects
+// const sphere = new THREE.Mesh(
+//     new THREE.SphereGeometry(0.5, 32, 32),
+//     material
+// )
+// sphere.position.x = - 1.5
 
-const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3, 0.2, 32, 64),
-    material
-)
-torus.position.x = 1.5
+// const cube = new THREE.Mesh(
+//     new THREE.BoxGeometry(0.75, 0.75, 0.75),
+//     material
+// )
 
-const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(5, 5),
-    material
-)
-plane.rotation.x = - Math.PI * 0.5
-plane.position.y = - 0.65
+// const torus = new THREE.Mesh(
+//     new THREE.TorusGeometry(0.3, 0.2, 32, 64),
+//     material
+// )
+// torus.position.x = 1.5
 
-scene.add(sphere, cube, torus, plane)
+// const plane = new THREE.Mesh(
+//     new THREE.PlaneGeometry(5, 5),
+//     material
+// )
+// plane.rotation.x = - Math.PI * 0.5
+// plane.position.y = - 0.65
+
+// scene.add(sphere, cube, torus, plane)
+
+loader.load(
+	// resource URL
+	// 'models/gltf/ironCrown.gltf',
+	// called when the resource is loaded
+	function ( gltf ) {
+
+		scene.add( gltf.scene );
+
+		gltf.animations; // Array<THREE.AnimationClip>
+		gltf.scene; // THREE.Group
+		gltf.scenes; // Array<THREE.Group>
+		gltf.cameras; // Array<THREE.Camera>
+		gltf.asset; // Object
+
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+
+	}
+);
+
 
 /**
  * Sizes
@@ -166,13 +201,13 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    sphere.rotation.y = 0.1 * elapsedTime
-    cube.rotation.y = 0.1 * elapsedTime
-    torus.rotation.y = 0.1 * elapsedTime
+    // sphere.rotation.y = 0.1 * elapsedTime
+    // cube.rotation.y = 0.1 * elapsedTime
+    // torus.rotation.y = 0.1 * elapsedTime
 
-    sphere.rotation.x = 0.15 * elapsedTime
-    cube.rotation.x = 0.15 * elapsedTime
-    torus.rotation.x = 0.15 * elapsedTime
+    // sphere.rotation.x = 0.15 * elapsedTime
+    // cube.rotation.x = 0.15 * elapsedTime
+    // torus.rotation.x = 0.15 * elapsedTime
 
     // Update controls
     controls.update()
