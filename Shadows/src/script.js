@@ -44,12 +44,12 @@ gui.add(material, 'roughness').min(0).max(1).step(0.001)
  * Objects
  */
 const sphere = new THREE.Mesh(
-    new THREE.SphereBufferGeometry(0.5, 32, 32),
+    new THREE.SphereGeometry(0.5, 32, 32),
     material
 )
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneBufferGeometry(5, 5),
+    new THREE.PlaneGeometry(5, 5),
     material
 )
 plane.rotation.x = - Math.PI * 0.5
