@@ -54,6 +54,23 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
+// Sounds
+const hitSound = new Audio('/sounds/hit.mp3')
+
+const playHitSound = (collision) => {
+
+    const impactStrength = collision.contact.getImpactVelocityAlongNormal()
+
+    if(impactStrength > 1.5){
+        hitSound.volume = Math.random()
+        hitSound.currentTime = 0
+        hitSound.play()
+    }
+    
+}
+
+
 /**
  * Textures
  */
@@ -71,6 +88,8 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 // Physics
 const world = new CANNON.World()
+world.broadphase = new CANNON.SAPBroadphase(world)
+world.allowSleep = true //lets an object off animation consider for collisions
 world.gravity.set(0, -9.82, 0)
 
 
@@ -253,6 +272,8 @@ const createSphere = (radius, position) => {
 
     body.position.copy(position)
     world.addBody(body)
+    body.addEventListener('collide', playHitSound)
+
 
     //save in object to update
     objectsToUpdate.push({
@@ -290,7 +311,7 @@ const createBox = (side, position) => {
 
     body.position.copy(position)
     world.addBody(body)
-
+    body.addEventListener('collide', playHitSound)
     objectsToUpdate.push({
         mesh,
         body
