@@ -2,6 +2,8 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
 /**
  * Base
@@ -15,11 +17,53 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+//Models
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('/draco/') //copy draco files from node modules to static folder for optimisation
+
+const gltfLoader = new GLTFLoader()
+gltfLoader.setDRACOLoader(dracoLoader)
+
+//draco compression applied to bin file
+
+let mixer = null
+
+gltfLoader.load(
+    '/models/Fox/glTF/Fox.gltf',
+    (gltf) => {
+        // scene.add(gltf.scene.children[0])
+        // const children = []
+        mixer = new THREE.AnimationMixer(gltf.scene)
+        const action = mixer.clipAction(gltf.animations[2])
+
+        action.play()
+        gltf.scene.scale.set(0.025, 0.025, 0.025)
+        scene.add(gltf.scene)
+        // for(const i in gltf.scene.children.length){
+        //     children[i] = gltf.scene.children[i]
+        // }
+        // for(const child in children){
+        //     scene.add(child)
+        // }
+        // while(gltf.scene.children.length){
+        //     scene.add(gltf.scene.children[0])
+        // }
+
+    },
+    () => {
+        console.log('progress')
+    },
+
+    () => {
+        console.log('error')
+    },
+)
+
 /**
  * Floor
  */
 const floor = new THREE.Mesh(
-    new THREE.PlaneBufferGeometry(10, 10),
+    new THREE.PlaneGeometry(10, 10),
     new THREE.MeshStandardMaterial({
         color: '#444444',
         metalness: 0,
@@ -105,6 +149,12 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+
+    //update mixer
+    if(mixer !== null){
+        mixer.update(deltaTime)
+    }
 
     // Update controls
     controls.update()

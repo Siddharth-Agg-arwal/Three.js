@@ -25,7 +25,18 @@ debugObject.createSphere = () => {
     )
 }
 
-gui.add(debugObject, 'createSphere')
+debugObject.reset = () => {
+    for(const object of objectsToUpdate){
+        //remove object
+        object.body.removeEventListener('collide', playHitSound)
+        world.removeBody(object.body)
+
+        //remove mesh
+        scene.remove(object.mesh)
+    }
+}
+
+gui.add(debugObject, 'reset')
 
 debugObject2.createBox = () => {
     createBox(
@@ -38,6 +49,7 @@ debugObject2.createBox = () => {
     )
 }
 
+gui.add(debugObject, 'createSphere')
 gui.add(debugObject2, 'createBox')
 
 //popular physics libraries :
