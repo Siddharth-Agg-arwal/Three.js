@@ -45,11 +45,22 @@ const material = new THREE.RawShaderMaterial({
     // lights:true,
     vertexShader:testVertexShader,
     fragmentShader:testFragmentShader,
+    uniforms:{
+        uFrequency: { value: new THREE.Vector2(10,5)},
+        uTime: { value: 0 },
+        uColor: {value: new THREE.Color('orange')}
+    }
     // transparent:true
 })
 
+
+gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('freqX')
+gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('freqY')
+
+
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+mesh.scale.y = 2/3
 scene.add(mesh)
 
 /**
@@ -102,8 +113,14 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const clock = new THREE.Clock()
 
 const tick = () =>
-{
+{   
+
+    // can't pass very huge values to the vertex glsl
+
     const elapsedTime = clock.getElapsedTime()
+
+    //add amimation to flag
+    material.uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
