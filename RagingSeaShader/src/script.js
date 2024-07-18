@@ -21,13 +21,13 @@ const scene = new THREE.Scene()
  * Water
  */
 // Geometry
-const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128)
+const waterGeometry = new THREE.PlaneGeometry(4, 4, 128, 128)
 
 // Material
 
 
 const debugObject = {}
-debugObject.depthColor = '#0000ff'
+debugObject.depthColor = '#15117f'
 debugObject.surfaceColor = '#8888ff'
 
 const waterMaterial = new THREE.ShaderMaterial({
@@ -41,19 +41,31 @@ const waterMaterial = new THREE.ShaderMaterial({
         uBigWavesElevation: { value: 0.2 },
         uBigWavesFreq: {value: new THREE.Vector2(4, 1.5)},
 
+        uSmallWavesSpeed: {value : 0.75},
+        uSmallWavesElevation: { value: 0.2 },
+        uSmallWavesFreq: {value: new THREE.Vector2(4, 1.5)},
+        uSmallWavesIterations : {value : 3.0},
+
         uDepthColor : { value : new THREE.Color(debugObject.depthColor)},
         uSurfaceColor : { value : new THREE.Color(debugObject.surfaceColor)},
-        uColorOffset : {value : 0.25 },
-        uColorMultiplier : {value : 2.0}
+        uColorOffset : {value : 0.323 },
+        uColorMultiplier : {value : 2.303}
 
     }
 })
 
 
-gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('wave_elevation')
+gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('uBigWavesElevation')
 gui.add(waterMaterial.uniforms.uBigWavesFreq.value, 'x').min(0).max(10).step(0.001).name('uBigWaveFreqX')
 gui.add(waterMaterial.uniforms.uBigWavesFreq.value, 'y').min(0).max(10).step(0.001).name('uBigWaveFreqZ')
-gui.add(waterMaterial.uniforms.uWavesSpeed, 'value').min(0).max(10).step(0.001).name('uWavesSpeed')
+gui.add(waterMaterial.uniforms.uWavesSpeed, 'value').min(0).max(10).step(0.001).name('uBigWavesSpeed')
+
+gui.add(waterMaterial.uniforms.uSmallWavesElevation, 'value').min(0).max(1).step(0.001).name('uSmallWavesElevation')
+gui.add(waterMaterial.uniforms.uSmallWavesFreq.value, 'x').min(0).max(10).step(0.001).name('uSmallWaveFreqX')
+gui.add(waterMaterial.uniforms.uSmallWavesFreq.value, 'y').min(0).max(10).step(0.001).name('uSmallWaveFreqZ')
+gui.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(10).step(0.001).name('uSmallWavesSpeed')
+gui.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(10).step(1).name('uSmallWavesIterations')
+
 
 gui.addColor(debugObject, 'depthColor').name('depthColor').onChange(() => {waterMaterial.uniforms.uDepthColor.value.set(debugObject.depthColor)})
 gui.addColor(debugObject, 'surfaceColor').name('surfaceColor').onChange(() => {waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor)})
