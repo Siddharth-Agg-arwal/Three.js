@@ -2,7 +2,7 @@ uniform float uTime;
 
 uniform float uSize;
 attribute float aScale;
-
+attribute vec3 aRandomness;
 
 varying vec3 vColor;
 
@@ -17,7 +17,7 @@ void main(){
     //spin
     float angle = atan(modelPosition.x, modelPosition.z);
     float distanceToCenter = length(modelPosition.xz);
-    float angleOffset = (1.0 / distanceToCenter) * uTime * 0.2;
+    float angleOffset = (1.0 / distanceToCenter) * uTime * 0.5;
     angle += angleOffset;
     // modelPosition.x = cos(angle);
     // modelPosition.z = sin(angle); //badass portal with just cos and sin
@@ -25,6 +25,10 @@ void main(){
     modelPosition.x = cos(angle) * distanceToCenter;
     modelPosition.z = sin(angle) * distanceToCenter;
 
+    //randomness
+    modelPosition.x += aRandomness.x;
+    modelPosition.y += aRandomness.y;
+    modelPosition.z += aRandomness.z;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
