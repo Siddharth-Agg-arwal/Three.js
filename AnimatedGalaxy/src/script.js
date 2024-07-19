@@ -74,9 +74,9 @@ const generateGalaxy = () =>
         const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
         const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
 
-        positions[i3    ] = Math.cos(branchAngle) * radius + randomX
-        positions[i3 + 1] = randomY
-        positions[i3 + 2] = Math.sin(branchAngle) * radius + randomZ
+        positions[i3    ] = Math.cos(branchAngle) * radius //after removing randomness it appears like a friggin hourglass
+        positions[i3 + 1] = 0
+        positions[i3 + 2] = Math.sin(branchAngle) * radius
 
         // Color
         const mixedColor = insideColor.clone()
@@ -109,10 +109,9 @@ const generateGalaxy = () =>
         fragmentShader: fragmentShader,
 
         uniforms:{
-            uSize : { value : 0.5},
+            uTime : { value : 0.1},
 
-            insideColor: {value : new THREE.Color(parameters.insideColor)},
-            outsideColor: {value : new THREE.Color(parameters.outsideColor)}
+            uSize : { value : 30.0 * renderer.getPixelRatio()},
         }
     })
     /**
@@ -122,12 +121,17 @@ const generateGalaxy = () =>
     scene.add(points)
 }
 
+//defined renderer here to get renderer.getPixelRatio() in generateGalaxy()
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+
 generateGalaxy()
 
 
-gui.add(material.uniforms.uSize, 'value').min(0.1).max(3.0).step(0.001).name('particleSize')
-gui.addColor(parameters, 'insideColor').name('GalaxyInsideColor').onChange(() => material.uniforms.insideColor.set(parameters.insideColor))
-gui.addColor(parameters, 'outsideColor').name('GalaxyOutsideColor').onChange(() => material.uniforms.outsideColor.set(parameters.outsideColor))
+gui.add(material.uniforms.uSize, 'value').min(0.1).max(40.0).step(0.001).name('particleSize')
+// gui.addColor(parameters, 'insideColor').name('GalaxyInsideColor').onChange(() => material.uniforms.insideColor.set(parameters.insideColor))
+// gui.addColor(parameters, 'outsideColor').name('GalaxyOutsideColor').onChange(() => material.uniforms.outsideColor.set(parameters.outsideColor))
 
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
@@ -178,9 +182,7 @@ controls.enableDamping = true
 /**
  * Renderer
  */
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
-})
+
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
@@ -192,6 +194,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    //update material
+    material.uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
